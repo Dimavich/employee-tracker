@@ -1,0 +1,23 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "CLI to navigate a sql employee database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dimavich/employee-tracker.git"
+  },
+  "author": "Dmitriy Babich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dimavich/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/Dimavich/employee-tracker#readme",
+  "dependencies": {
+    "inquirer": "^8.1.1",
+    "mysql": "^2.18.1"
+  }
+}
