@@ -8,3 +8,7 @@ const connection = mysql.createConnection({
     password:'root',
     database:'employees_db',
 });
+
+connection.connect((err)=>{
+    if(err) throw err;
+})
