@@ -19,7 +19,7 @@ const employeeSearch = () => {
         name: 'action',
         type: 'list',
         message:'What would you like to do?',
-        choices: ['View','Add','Update']
+        choices: ['View','Add','Update','Exit']
     })
     .then((answer)=>{
         switch(answer.action) {
@@ -32,6 +32,9 @@ const employeeSearch = () => {
             case 'Update':
                 updateDb();
                 break;
+            case 'Exit':
+                endConnection();
+                break
         };
     });
 };
@@ -52,7 +55,7 @@ const viewDb = () => {
             case 'employees':
                 renderEmployee();
                 break;
-            case 'department':
+            case 'departments':
                 renderDepartment();
                 break;
             case 'role':
@@ -78,7 +81,7 @@ const addDb = () => {
             case 'employees':
                 addToEmployee();
                 break;
-            case 'department':
+            case 'departments':
                 addToDepartment();
                 break;
             case 'role':
@@ -119,16 +122,29 @@ const renderEmployee = () => {
     connection.query(query,(err,res) =>{
         res.forEach(({id,first_name,last_name,role_id,manager_id})=>{
             console.log(`id: ${id}  ||  first: ${first_name}   ||  last: ${last_name}    ||  role: ${role_id}  ||  manager: ${manager_id}`);
+            employeeSearch();
         })
     })
 };
 
 const renderDepartment = () => {
-    // code
+    const query = `SELECT * FROM department`;
+    connection.query(query,(err,res)=>{
+        res.forEach(({id,name})=>{
+            console.log(`id: ${id}  ||  name: ${name}`);
+            employeeSearch();
+        })
+    })
 };
 
 const renderRole = () => {
-    // code
+    const query = `SELECT * FROM role`;
+    connection.query(query,(err,res) =>{
+        res.forEach(({id,title,salary,department_id})=>{
+            console.log(`id: ${id}  ||  title: ${title}   ||  salary: ${salary}    ||  department_id: ${department_id}`);
+            employeeSearch();
+        })
+    })
 };
 
 // add to table functions
@@ -155,4 +171,9 @@ const updateDepartment = () => {
 const updateRole = () => {
     // code
 };
+
+const endConnection = () => {
+    connection.end();
+    console.log('Exiting......');
+}
 
