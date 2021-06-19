@@ -113,7 +113,25 @@ const updateDb = () => {
         }
     })
 };
+// render functions
+const renderEmployee = () => {
+    const query = `SELECT * FROM employees`;
+    connection.query(query,(err,res) =>{
+        res.forEach(({id,first_name,last_name,role_id,manager_id})=>{
+            console.log(`id: ${id}  ||  first: ${first_name}   ||  last: ${last_name}    ||  role: ${role_id}  ||  manager: ${manager_id}`);
+        })
+    })
+};
 
+const renderDepartment = () => {
+    // code
+};
+
+const renderRole = () => {
+    // code
+};
+
+// add to table functions
 const addToEmployee = () => {
     // code
 };
@@ -125,3 +143,16 @@ const addToDepartment = () => {
 const addToRole = () => {
     // code
 };
+
+const updateEmployee = () => {
+    // code
+};
+
+const updateDepartment = () => {
+    // code
+};
+
+const updateRole = () => {
+    // code
+};
+
