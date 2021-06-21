@@ -120,30 +120,24 @@ const updateDb = () => {
 const renderEmployee = () => {
     const query = `SELECT * FROM employees`;
     connection.query(query,(err,res) =>{
-        res.forEach(({id,first_name,last_name,role_id,manager_id})=>{
-            console.table(res);
-            employeeSearch();
-        })
+        console.table(res);
+        employeeSearch();
     })
 };
 
 const renderDepartment = () => {
     const query = `SELECT * FROM department`;
     connection.query(query,(err,res)=>{
-        res.forEach(({id,name})=>{
-            console.table(res);
-            employeeSearch();
-        })
+        console.table(res);
+        employeeSearch();
     })
 };
 
 const renderRole = () => {
     const query = `SELECT * FROM role`;
     connection.query(query,(err,res) =>{
-        res.forEach(({id,title,salary,department_id})=>{
-            console.table(res);
-            employeeSearch();
-        })
+        console.table(res);
+        employeeSearch();
     })
 };
 
@@ -226,9 +220,12 @@ const addToDepartment = () => {
 
 
 const addToRole = () => {
-    let query = 'SELECT role.id, role.title FROM role ORDER BY role.id';
+    let query = 'SELECT name FROM department ORDER BY id';
     connection.query(query, (err,res)=>{
         if (err) throw err;
+        console.log('\n');
+        console.table(res);
+        console.log('\n');
         inquirer.prompt([
             {
                 name:'title',
@@ -240,25 +237,26 @@ const addToRole = () => {
                 type:'integer',
                 message:'sallary  ex.(00.000)'
             },
+            {
+                name:'departmendId',
+                type: 'integer',
+                message:'What department is this role in?'
+            }
         ])
         .then((answers)=>{
-            let id = res.map(()=>res[0].id)
-            id++;
-            console.log('Role Id: ' + id);
             connection.query(
                 'INSERT INTO role SET ?',
                 
                 {
                     title: answers.title,
                     salary: answers.salary,
-                    department_id: id,
+                    department_id: answers.departmendId,
                 },
                 (err) => {
                     if (err) throw err;
-                    console.log(`Department ${answers.name} was added to the department database`);
+                    console.log(`Department ${answers.title} was added to the department database`);
                     employeeSearch();
-                },
-                
+                },      
             )
         })
     });
@@ -266,15 +264,105 @@ const addToRole = () => {
 
 
 const updateEmployee = () => {
-    // code
+    connection.query('SELECT * FROM employees',(err,res)=>{
+        console.log('\n');
+        console.table(res);
+        console.log('\n');
+    })
+    inquirer.prompt([
+        {
+            name:'updateLocation',
+            type:'list',
+            message:'what would you like to update?',
+            choices:['first_name','last_name','role_id','manager_id']        
+        },
+        {
+            name:'id',
+            type:'integer',
+            message:'Index location'
+        },
+        {
+            name:'updateValue',
+            type:'input',
+            message:'Input the new value' 
+        }
+    ])
+    .then((answers)=>{
+        connection.query(
+            `UPDATE employees SET ${answers.updateLocation} = ${answers.updateValue} WHERE (id = ${answers.id})`,
+            (err) => {
+                if (err) throw err;
+                console.log(`${answers.updateLocation} on row ${answers.id} updated to ${answers.updateValue}`);
+                employeeSearch();
+            }
+        )
+    })
 };
 
 const updateDepartment = () => {
-    // code
+    connection.query('SELECT * FROM department',(err,res)=>{
+        console.log('\n');
+        console.table(res);
+        console.log('\n');
+    })
+    inquirer.prompt([
+        {
+            name:'id',
+            type:'integer',
+            message:'Index location'
+        },
+        {
+            name:'updateValue',
+            type:'input',
+            message:'Input the new value' 
+        }
+    ])
+    .then((answers)=>{
+        connection.query(
+            `UPDATE department SET department.name = ${answers.updateValue} WHERE (id = ${answers.id})`,
+            (err) => {
+                if (err) throw err;
+                console.log(`department name on row ${answers.id} updated to ${answers.updateValue}`);
+                employeeSearch();
+            }
+        )
+    })
 };
 
 const updateRole = () => {
-    // code
+    connection.query('SELECT * FROM role',(err,res)=>{
+        console.log('\n');
+        console.table(res);
+        console.log('\n');
+    })
+    inquirer.prompt([
+        {
+            name:'updateLocation',
+            type:'list',
+            message:'what would you like to update?',
+            choices:['title','salary','department_id']        
+        },
+        {
+            name:'id',
+            type:'integer',
+            message:'Index location'
+        },
+        {
+            name:'updateValue',
+            type:'input',
+            message:'Input the new value' 
+        }
+    ])
+    .then((answers)=>{
+        connection.query(
+            `UPDATE role SET ${answers.updateLocation} = ${answers.updateValue} WHERE (id = ${answers.id})`,
+            (err) => {
+                if (err) throw err;
+                console.log(`${answers.updateLocation} on row ${answers.id} updated to ${answers.updateValue}`);
+                employeeSearch();
+            }
+        )
+    })
 };
 
 const endConnection = () => {
